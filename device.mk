@@ -150,11 +150,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.3-service.clearkey
 
-# Fingerprint
-SOONG_CONFIG_ONEPLUS_MSMNILE_FOD_HBM := true
-SOONG_CONFIG_NAMESPACES += REALME_MSMNILE_FOD
-SOONG_CONFIG_REALME_MSMNILE_FOD := HBM POS_X POS_Y SIZE
-
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.RMX1931 \
     vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.RMX1931 \
