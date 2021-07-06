@@ -1,0 +1,175 @@
+##################################################################################
+### VENDOR_EDIT, OPPO All rights reserved.
+###
+### File: - init.oppo.rc
+### Author: jiangyg@PM
+###
+### ------------------------------- Revision History: ----------------------------
+### <author>                        <data>       <version>   <desc>
+### ------------------------------------------------------------------------------
+### jiangyg@PM                     2013-10-21                Create this file
+##################################################################################
+
+on boot
+    mkdir /data/opponvitems  0771 radio radio
+    write /proc/sys/fs/suid_dumpable 1
+    setprop persist.vendor.radio.force_on_dc true
+    chmod 0660 /dev/mdmreason
+    chown system system /dev/mdmreason
+
+    # awinic haptic
+    chown system audio /dev/aw8697_haptic
+    chmod 0660 /dev/aw8697_haptic
+    chown system audio /sys/class/leds/vibrator/haptic_audio
+    chmod 0660 /sys/class/leds/vibrator/haptic_audio
+
+    # goodix_fp
+    chown system system /dev/goodix_fp
+
+    # short_c
+    chown system system /sys/class/power_supply/battery/short_c_batt_in_idle
+    chown system system /sys/class/power_supply/battery/short_c_batt_update_change
+    chown system system /sys/class/power_supply/battery/short_c_hw_feature
+    chown system system /sys/class/power_supply/battery/short_c_batt_limit_chg
+    chown system system /sys/class/power_supply/battery/short_c_batt_limit_rechg
+    chown system system /sys/class/power_supply/battery/short_ic_volt_thresh
+    chown system system /sys/class/power_supply/battery/short_ic_otp_status
+    chown system system /sys/class/power_supply/battery/ship_mode
+    chown system system /sys/class/power_supply/battery/cool_down
+    chmod 0666 /sys/class/power_supply/battery/call_mode
+    chown system system /sys/class/power_supply/battery/call_mode
+
+    # mmi_charging_enable
+    chown system system /sys/class/power_supply/battery/mmi_charging_enable
+    chmod 0666 /sys/class/power_supply/battery/mmi_charging_enable
+
+    # OTG
+    chown system system /sys/class/power_supply/usb/otg_switch
+    chmod 06666 /sys/class/power_supply/usb/otg_switch
+
+    # wakeup reason
+    chown system system /sys/kernel/wakeup_reasons/wakeup_stastisc_reset
+    chmod 0664 /sys/kernel/wakeup_reasons/wakeup_stastisc_reset
+
+    # tbatt poweroff
+    chown system system /proc/tbatt_pwroff
+
+    # NDIS 5.0
+    write /config/usb_gadget/g1/functions/gsi.rndis/rndis_class_id 1
+
+    # ramdump
+    chown system system /sys/power/ramdump_by_key
+
+    # oppo_display
+    chown system system /sys/kernel/oppo_display/hbm
+    chown system system /sys/kernel/oppo_display/seed
+    chown system system /sys/kernel/oppo_display/cabc
+    chown system system /sys/kernel/oppo_display/dimlayer_bl_en
+    chown system system /sys/kernel/oppo_display/ffl_set
+    chown system system /sys/kernel/oppo_display/dump_info
+    chown system system /sys/kernel/oppo_display/esd_status
+    chown system system /sys/kernel/oppo_display/power_status
+    chown system system /sys/kernel/oppo_display/dimlayer_hbm
+    chown system system /sys/kernel/oppo_display/notify_fppress
+    chown system system /sys/kernel/oppo_display/force_screenfp
+    chown system system /sys/kernel/oppo_display/sau_closebl_node
+    chown system system /sys/kernel/oppo_display/panel_serial_number
+    chown system system /sys/kernel/oppo_display/audio_ready
+    chown system system /sys/kernel/oppo_display/aod_light_mode_set
+    chown system system /sys/kernel/oppo_display/serial_number
+    chown system system /sys/kernel/oppo_display/hdr10
+
+    chmod 0666 /sys/kernel/oppo_display/hbm
+    chmod 0666 /sys/kernel/oppo_display/seed
+    chmod 0666 /sys/kernel/oppo_display/cabc
+    chmod 0666 /sys/kernel/oppo_display/dimlayer_bl_en
+    chmod 0666 /sys/kernel/oppo_display/ffl_set
+    chmod 0666 /sys/kernel/oppo_display/dump_info
+    chmod 0666 /sys/kernel/oppo_display/esd_status
+    chmod 0666 /sys/kernel/oppo_display/power_status
+    chmod 0666 /sys/kernel/oppo_display/dimlayer_hbm
+    chmod 0666 /sys/kernel/oppo_display/notify_fppress
+    chmod 0666 /sys/kernel/oppo_display/force_screenfp
+    chmod 0666 /sys/kernel/oppo_display/sau_closebl_node
+    chmod 0666 /sys/kernel/oppo_display/panel_serial_number
+    chmod 0666 /sys/kernel/oppo_display/audio_ready
+    chmod 0666 /sys/kernel/oppo_display/aod_light_mode_set
+    chmod 0666 /sys/kernel/oppo_display/serial_number
+    chmod 0666 /sys/kernel/oppo_display/hdr10
+
+    # Touchpanel
+    chown system system /proc/touchpanel/tp_fw_update
+    chown system system /proc/touchpanel/oppo_tp_limit_enable
+    chown system system /proc/touchpanel/oppo_tp_direction
+    chown system system /proc/touchpanel/double_tap_enable
+    chown system system /proc/touchpanel/coordinate
+    chown system system /proc/touchpanel/game_switch_enable
+    chown system system /proc/touchpanel/fd_enable
+    chown system system /proc/touchpanel/event_num
+    chown system system /proc/touchpanel/fd_touch_count
+    chown system system /proc/touchpanel/fp_enable
+    chown system system /proc/touchpanel/touch_filter
+    chown system system /proc/touchpanel/baseline_test
+
+    # ALS
+    chown system system /proc/oppoAls/blue_max_lux
+    chown system system /proc/oppoAls/cali_coe
+    chown system system /proc/oppoAls/green_max_lux
+    chown system system /proc/oppoAls/red_max_lux
+    chown system system /proc/oppoAls/row_coe
+    chown system system /proc/oppoAls/white_max_lux
+
+    chmod 0666 /proc/oppoAls/blue_max_lux
+    chmod 0666 /proc/oppoAls/cali_coe
+    chmod 0666 /proc/oppoAls/green_max_lux
+    chmod 0666 /proc/oppoAls/red_max_lux
+    chmod 0666 /proc/oppoAls/row_coe
+    chmod 0666 /proc/oppoAls/white_max_lux
+
+    # disalbe suid_dumpable to pass cts test
+on property:ro.vendor.build.type=user
+    write /proc/sys/fs/suid_dumpable 0
+
+on property:ro.board.platform=msmnile && property:ro.baseband=msm && property:ro.vendor.qti.va_aosp.support=0
+    setprop ro.telephony.iwlan_operation_mode "legacy"
+
+    mkdir /persist/camera 0777 system system
+    chmod 0755 /dev/cpuset
+    mkdir /dev/freezer
+    mount cgroup none /dev/freezer freezer
+    chown system system /dev/freezer
+    chmod 0755 /dev/freezer/
+
+    chown system system /dev/freezer/cgroup.procs
+    chmod 0666 /dev/freezer/cgroup.procs
+    chown system system /dev/freezer/tasks
+    chmod 0666 /dev/freezer/tasks
+
+    chown system system /dev/cpuset/cgroup.procs
+    chown system system /dev/cpuset/foreground/cgroup.procs
+    chown system system /dev/cpuset/foreground/boost/cgroup.procs
+    chown system system /dev/cpuset/background/cgroup.procs
+    chown system system /dev/cpuset/system-background/cgroup.procs
+    chown system system /dev/cpuset/top-app/cgroup.procs
+
+    chmod 0666 /dev/cpuset/foreground/cgroup.procs
+    chmod 0666 /dev/cpuset/foreground/boost/cgroup.procs
+    chmod 0666 /dev/cpuset/background/cgroup.procs
+    chmod 0666 /dev/cpuset/system-background/cgroup.procs
+    chmod 0666 /dev/cpuset/top-app/cgroup.procs
+    chmod 0666 /dev/cpuset/cgroup.procs
+
+    chown system system /dev/stune/background/cgroup.procs
+    chown system system /dev/stune/top-app/cgroup.procs
+    chown system system /dev/stune/foreground/cgroup.procs
+    chown system system /dev/stune/rt/cgroup.procs
+    chmod 0666 /dev/stune/background/cgroup.procs
+    chmod 0666 /dev/stune/top-app/cgroup.procs
+    chmod 0666 /dev/stune/foregroud/cgroup.procs
+    chmod 0666 /dev/stune/rt/cgroup.procs
+
+    chmod 0664 /dev/stune/foreground/schedtune.boost
+
+on post-fs-data
+    mkdir /data/system/audio 0775 media media
+    mkdir /mnt/vendor/persist/media 0775 media media
