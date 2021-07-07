@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Get non-open-source specific aspects
 $(call inherit-product, vendor/realme/RMX1931/RMX1931-vendor.mk)
