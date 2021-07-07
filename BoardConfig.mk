@@ -65,6 +65,7 @@ TARGET_USES_UEFI := true
 #BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 #BUILD_BROKEN_PREBUILT_ELF_FILES := true
 #BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+
 # Camera
 TARGET_USES_QTI_CAMERA_DEVICE := true
 
@@ -122,8 +123,7 @@ TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
 
 # HIDL
-DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
-DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
+DEVICE_FRAMEWORK_MANIFEST_FILE := $(DEVICE_PATH)/framework_manifest.xml
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0xa90000 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 kpti=off msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7 androidboot.init_fatal_reboot_target=recovery androidboot.usbcontroller=a600000.dwc3 androidboot.selinux=permissive
@@ -138,6 +138,12 @@ BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_KERNEL_SOURCE := kernel/realme/sm8150
 TARGET_KERNEL_CONFIG := RMX1931_defconfig
 TARGET_KERNEL_CLANG_COMPILE := true
+BOARD_BOOTIMG_HEADER_VERSION := 1
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+
 
 # Keystore
 TARGET_PROVIDES_KEYMASTER := true
@@ -214,7 +220,6 @@ BOARD_PLAT_PUBLIC_SEPOLICY_DIR += \
 BOARD_PLAT_PRIVATE_SEPOLICY_DIR += \
     device/qcom/sepolicy/qva/private
 
-
 # System as root
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 BOARD_ROOT_EXTRA_FOLDERS := bluetooth dsp firmware persist
@@ -226,8 +231,6 @@ PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 # Verified Boot
 BOARD_AVB_ENABLE := true
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --set_hashtree_disabled_flag
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 2
 
 # WiFi
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
@@ -242,28 +245,5 @@ WIFI_DRIVER_STATE_OFF := "OFF"
 WIFI_DRIVER_STATE_ON := "ON"
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
-
-# TWRP specific build flags
-TW_THEME := portrait_hdpi
-RECOVERY_SDCARD_ON_DATA := true
-TARGET_RECOVERY_QCOM_RTC_FIX := true
-TW_EXCLUDE_DEFAULT_USB_INIT := true
-TW_EXTRA_LANGUAGES := true
-TW_INCLUDE_NTFS_3G := true
-TW_USE_TOOLBOX := true
-TW_INPUT_BLACKLIST := "hbtp_vm"
-TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
-TW_MAX_BRIGHTNESS := 2047
-TW_DEFAULT_BRIGHTNESS := 1200
-TW_Y_OFFSET := 80
-TW_H_OFFSET := -80
-TW_NO_SCREEN_BLANK := true
-TWRP_INCLUDE_LOGCAT := true
-TARGET_USES_LOGD := true
-TARGET_USES_MKE2FS := true
-TW_EXCLUDE_TWRPAPP := true
-TW_HAS_EDL_MODE := true
-TW_OZIP_DECRYPT_KEY := "1c4c1ea3a12531ae491b21bb31613c11"
-TW_SKIP_COMPATIBILITY_CHECK := true
 
 -include vendor/realme/RMX1931/BoardConfigVendor.mk
