@@ -17,25 +17,43 @@
 #define LOG_TAG "FingerprintInscreenService"
 
 #include "FingerprintInscreen.h"
-#include <android-base/logging.h>
 #include <hidl/HidlTransportSupport.h>
+#include <android-base/logging.h>
 #include <fstream>
+#include <cmath>
+#include <thread>
 
-#define FINGERPRINT_ACQUIRED_VENDOR 6
-#define FINGERPRINT_ERROR_VENDOR 8
+/* Hardcoded stuffs */
+#define FP_PRESS_PATH "/sys/kernel/oppo_display/notify_fppress"
+#define DIMLAYER_PATH "/sys/kernel/oppo_display/dimlayer_hbm"
+#define NOTIFY_BLANK_PATH "/sys/kernel/oppo_display/notify_panel_blank"
+#define AOD_MODE_PATH "/sys/kernel/oppo_display/aod_light_mode_set"
+#define DOZE_STATUS "/proc/touchpanel/DOZE_STATUS"
+#define X_POS 442
+#define Y_POS 1969
+#define FP_SIZE 196
+#define FP_BEGIN 1
+#define FP_ENDIT 0
 
-#define OP_ENABLE_FP_LONGPRESS 3
-#define OP_DISABLE_FP_LONGPRESS 4
-#define OP_RESUME_FP_ENROLL 8
-#define OP_FINISH_FP_ENROLL 10
+namespace {
 
-#define OP_DISPLAY_AOD_MODE 8
-#define OP_DISPLAY_NOTIFY_PRESS 9
-#define OP_DISPLAY_SET_DIM 10
+template <typename T>
+static inline void set(const std::string& path, const T& value) {
+    std::ofstream file(path);
+    file << value;
+    //LOG(INFO) << "wrote path: " << path << ", value: " << value << "\n";
+}
 
-// This is not a typo by me. It's by OnePlus.
-#define HBM_ENABLE_PATH "/sys/class/drm/card0-DSI-1/op_friginer_print_hbm"
-#define DIM_AMOUNT_PATH "/sys/class/drm/card0-DSI-1/dim_alpha"
+template <typename T>
+static inline T get(const std::string& path, const T& def) {
+    std::ifstream file(path);
+    T result;
+
+    file >> result;
+    return file.fail() ? def : result;
+}
+
+} // anonymous namespace
 
 namespace vendor {
 namespace lineage {
@@ -45,141 +63,95 @@ namespace inscreen {
 namespace V1_0 {
 namespace implementation {
 
-/*
- * Write value to path and close file.
- */
-template <typename T>
-static void set(const std::string& path, const T& value) {
-    std::ofstream file(path);
-    file << value;
+FingerprintInscreen::FingerprintInscreen():isDreamState{false}{
 }
 
-template <typename T>
-static T get(const std::string& path, const T& def) {
-    std::ifstream file(path);
-    T result;
-
-    file >> result;
-    return file.fail() ? def : result;
+Return<int32_t> FingerprintInscreen::getPositionX() {
+    return X_POS;
 }
 
-FingerprintInscreen::FingerprintInscreen() {
-    this->mVendorFpService = IVendorFingerprintExtensions::getService();
-    this->mVendorDisplayService = IOneplusDisplay::getService();
+Return<int32_t> FingerprintInscreen::getPositionY() {
+    return Y_POS;
+}
+
+Return<int32_t> FingerprintInscreen::getSize() {
+    return FP_SIZE;
 }
 
 Return<void> FingerprintInscreen::onStartEnroll() {
-    this->mVendorFpService->updateStatus(OP_DISABLE_FP_LONGPRESS);
-    this->mVendorFpService->updateStatus(OP_RESUME_FP_ENROLL);
-
     return Void();
 }
 
 Return<void> FingerprintInscreen::onFinishEnroll() {
-    this->mVendorFpService->updateStatus(OP_FINISH_FP_ENROLL);
-
     return Void();
 }
 
 Return<void> FingerprintInscreen::onPress() {
-    this->mVendorDisplayService->setMode(OP_DISPLAY_AOD_MODE, 2);
-    this->mVendorDisplayService->setMode(OP_DISPLAY_SET_DIM, 1);
-    set(HBM_ENABLE_PATH, 1);
-    this->mVendorDisplayService->setMode(OP_DISPLAY_NOTIFY_PRESS, 1);
-
+    if(isDreamState){
+    set(DIMLAYER_PATH, FP_BEGIN);
+    std::thread([this]() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(60));
+        if (isDreamState) {
+            set(FP_PRESS_PATH, FP_BEGIN);
+        }
+    }).detach();
+    } else {
+    set(FP_PRESS_PATH, FP_BEGIN);
+    }
     return Void();
 }
 
 Return<void> FingerprintInscreen::onRelease() {
-    this->mVendorDisplayService->setMode(OP_DISPLAY_AOD_MODE, 0);
-    this->mVendorDisplayService->setMode(OP_DISPLAY_SET_DIM, 0);
-    set(HBM_ENABLE_PATH, 0);
-    this->mVendorDisplayService->setMode(OP_DISPLAY_NOTIFY_PRESS, 0);
-
+    set(FP_PRESS_PATH, FP_ENDIT);
+    if(isDreamState)
+    set(DIMLAYER_PATH, FP_ENDIT);
     return Void();
 }
 
 Return<void> FingerprintInscreen::onShowFODView() {
+    if(get(DOZE_STATUS, FP_ENDIT)) {
+    isDreamState = true;
+    set(NOTIFY_BLANK_PATH, FP_BEGIN);
+    set(AOD_MODE_PATH, FP_BEGIN);
+    } else {
+    isDreamState = false;
+    set(DIMLAYER_PATH, FP_BEGIN);
+    }
     return Void();
 }
 
 Return<void> FingerprintInscreen::onHideFODView() {
-    this->mVendorDisplayService->setMode(OP_DISPLAY_AOD_MODE, 0);
-    this->mVendorDisplayService->setMode(OP_DISPLAY_SET_DIM, 0);
-    set(HBM_ENABLE_PATH, 0);
-    this->mVendorDisplayService->setMode(OP_DISPLAY_NOTIFY_PRESS, 0);
-
+    if(!isDreamState)
+    set(DIMLAYER_PATH, FP_ENDIT);
     return Void();
 }
 
-Return<bool> FingerprintInscreen::handleAcquired(int32_t acquiredInfo, int32_t vendorCode) {
-    std::lock_guard<std::mutex> _lock(mCallbackLock);
-    if (mCallback == nullptr) {
-        return false;
-    }
-
-    if (acquiredInfo == FINGERPRINT_ACQUIRED_VENDOR) {
-        if (vendorCode == 0) {
-            Return<void> ret = mCallback->onFingerDown();
-            if (!ret.isOk()) {
-                LOG(ERROR) << "FingerDown() error: " << ret.description();
-            }
-            return true;
-        }
-
-        if (vendorCode == 1) {
-            Return<void> ret = mCallback->onFingerUp();
-            if (!ret.isOk()) {
-                LOG(ERROR) << "FingerUp() error: " << ret.description();
-            }
-            return true;
-        }
-    }
-
+Return<bool> FingerprintInscreen::handleAcquired(int32_t /* acquiredInfo */, int32_t /* vendorCode */) {
     return false;
 }
 
-Return<bool> FingerprintInscreen::handleError(int32_t error, int32_t vendorCode) {
-    return error == FINGERPRINT_ERROR_VENDOR && vendorCode == 6;
+Return<bool> FingerprintInscreen::handleError(int32_t /* error */, int32_t /* vendorCode */) {
+    return false;
 }
 
-Return<void> FingerprintInscreen::setLongPressEnabled(bool enabled) {
-    this->mVendorFpService->updateStatus(
-            enabled ? OP_ENABLE_FP_LONGPRESS : OP_DISABLE_FP_LONGPRESS);
-
+Return<void> FingerprintInscreen::setLongPressEnabled(bool) {
     return Void();
 }
 
-Return<int32_t> FingerprintInscreen::getDimAmount(int32_t) {
-    int dimAmount = get(DIM_AMOUNT_PATH, 0);
-    LOG(INFO) << "dimAmount = " << dimAmount;
-
-    return dimAmount;
+Return<int32_t> FingerprintInscreen::getDimAmount(int32_t /* brightness */) {
+    return 0;
 }
 
 Return<bool> FingerprintInscreen::shouldBoostBrightness() {
     return false;
 }
 
-Return<void> FingerprintInscreen::setCallback(const sp<IFingerprintInscreenCallback>& callback) {
+Return<void> FingerprintInscreen::setCallback(const sp<::vendor::lineage::biometrics::fingerprint::inscreen::V1_0::IFingerprintInscreenCallback>& callback) {
     {
         std::lock_guard<std::mutex> _lock(mCallbackLock);
         mCallback = callback;
     }
-
     return Void();
-}
-
-Return<int32_t> FingerprintInscreen::getPositionX() {
-    return FOD_POS_X;
-}
-
-Return<int32_t> FingerprintInscreen::getPositionY() {
-    return FOD_POS_Y;
-}
-
-Return<int32_t> FingerprintInscreen::getSize() {
-    return FOD_SIZE;
 }
 
 }  // namespace implementation
