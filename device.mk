@@ -150,15 +150,17 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.3-service.clearkey
 
+#Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.RMX1931 \
     vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.RMX1931 \
 
 PRODUCT_COPY_FILES += \
-    vendor/havoc/config/permissions/vendor.lineage.biometrics.fingerprint.inscreen.xml:system/etc/permissions/vendor.lineage.biometrics.fingerprint.inscreen.xml
-
-PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml \
+
+#lineage Specific
+PRODUCT_COPY_FILES += \
+    vendor/lineage/config/permissions/vendor.lineage.biometrics.fingerprint.inscreen.xml:system/etc/permissions/vendor.lineage.biometrics.fingerprint.inscreen.xml
 
 # FM
 PRODUCT_PACKAGES += \
