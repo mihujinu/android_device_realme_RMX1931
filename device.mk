@@ -18,6 +18,10 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 TARGET_SCREEN_HEIGHT := 2400
 TARGET_SCREEN_WIDTH := 1080
 
+# ANT+
+PRODUCT_PACKAGES += \
+    AntHalService
+
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-service \
@@ -153,7 +157,7 @@ PRODUCT_PACKAGES += \
 #Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.RMX1931 \
-    vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.RMX1931 \
+    lineage.biometrics.fingerprint.inscreen@1.0-service.RMX1931 \
     vendor.oppo.hardware.biometrics.fingerprint@2.1
 
 PRODUCT_COPY_FILES += \
@@ -166,7 +170,6 @@ PRODUCT_COPY_FILES += \
 # FM
 PRODUCT_PACKAGES += \
     FM2 \
-    libqcomfm_jni \
     qcom.fmradio
 
 # GPS

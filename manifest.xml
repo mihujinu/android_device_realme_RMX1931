@@ -1,0 +1,11 @@
+<!--
+    Input:
+        manifest.xml
+-->
+<manifest version="2.0" type="framework">
+    <system-sdk>
+        <version>28</version>
+        <version>29</version>
+        <version>30</version>
+    </system-sdk>
+</manifest>

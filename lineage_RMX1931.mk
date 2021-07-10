@@ -17,10 +17,15 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 PRODUCT_NAME := lineage_RMX1931
 PRODUCT_DEVICE := RMX1931
 PRODUCT_BRAND := realme
-PRODUCT_MODEL := RMX1931
+PRODUCT_MODEL := realme X2 Pro
 PRODUCT_MANUFACTURER := realme
 TARGET_VENDOR := realme
 TARGET_VENDOR_PRODUCT_NAME := realme
+
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    PRODUCT_NAME=RMX1931 \
+    BUILD_PRODUCT=RMX1931 \
+    TARGET_DEVICE=RMX1931
 
 PRODUCT_GMS_CLIENTID_BASE := android-realme
 
@@ -30,3 +35,6 @@ TARGET_SCREEN_WIDTH := 1080
 
 # Build info
 BUILD_FINGERPRINT := "google/redfin/redfin:11/RQ3A.210605.005/7349499:user/release-keys"
+
+PRODUCT_SYSTEM_PROPERTY_BLACKLIST += \
+    ro.product.device

@@ -61,10 +61,11 @@ TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
 
 #Build Broken
-#BUILD_BROKEN_DUP_RULES := true
-#BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
-#BUILD_BROKEN_PREBUILT_ELF_FILES := true
-#BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
+BUILD_BROKEN_PREBUILT_ELF_FILES := true
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+BUILD_BROKEN_VINTF_PRODUCT_COPY_FILES := true
 
 # Camera
 TARGET_USES_QTI_CAMERA_DEVICE := true
@@ -123,7 +124,9 @@ TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
 
 # HIDL
-DEVICE_FRAMEWORK_MANIFEST_FILE := $(DEVICE_PATH)/framework_manifest.xml
+DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/framework_compatibility_matrix.xml
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0xa90000 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 kpti=off msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7 androidboot.init_fatal_reboot_target=recovery androidboot.usbcontroller=a600000.dwc3 androidboot.selinux=permissive
@@ -219,6 +222,9 @@ PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 # Verified Boot
 BOARD_AVB_ENABLE := true
+
+# Security patch level
+VENDOR_SECURITY_PATCH := 2021-06-05
 
 # WiFi
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
