@@ -7,9 +7,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_p.mk)
 
-# Get non-open-source specific aspects
-$(call inherit-product, vendor/realme/RMX1931/RMX1931-vendor.mk)
-
 #screen density
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
@@ -219,6 +216,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sec_config:$(TARGET_COPY_OUT_VENDOR)/etc/sec_config \
 
+# Inherit vendor
+$(call inherit-product, vendor/realme/RMX1931/RMX1931-vendor.mk)
 
 # Keylayout
 PRODUCT_COPY_FILES += \
@@ -287,6 +286,9 @@ PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power@1.2-service-qti
+
+# Properties
+PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
 
 # Public Libraries
 PRODUCT_COPY_FILES += \
