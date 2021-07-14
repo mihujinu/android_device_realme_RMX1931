@@ -123,16 +123,11 @@ GNSS_HIDL_VERSION := 1.1
 TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
 
-# HIDL
-#DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
-#DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/manifest.xml
-#DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
-#DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/framework_compatibility_matrix.xml
-
-# Vendor manifest is named DEVICE_MANIFEST_FILE for legacy reasons.
+#HIDL
 DEVICE_MANIFEST_FILE := \
     device/realme/RMX1931/manifest.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(DEVICE_PATH)/framework_compatibility_matrix.xml
+
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0xa90000 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 kpti=off msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7 androidboot.init_fatal_reboot_target=recovery androidboot.usbcontroller=a600000.dwc3 androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00000000
