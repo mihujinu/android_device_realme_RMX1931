@@ -3,9 +3,13 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+# Realme X2 Pro is a product launched with pie
 $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_p.mk)
+
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 #screen density
 PRODUCT_AAPT_CONFIG := normal
@@ -146,6 +150,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
 
+#Define
+boardPRODUCT_BOARD_PLATFORM:= sm8150
+PRODUCT_USES_QCOM_HARDWARE:= true
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -279,16 +286,13 @@ DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
     $(LOCAL_PATH)/overlay-lineage
 
-PRODUCT_ENFORCE_RRO_TARGETS := *
-PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
-    $(LOCAL_PATH)/overlay-lineage/packages/apps/Snap
-
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power@1.2-service-qti
 
 # Properties
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
+-include $(LOCAL_PATH)/vendor_prop.mk
 
 # Public Libraries
 PRODUCT_COPY_FILES += \

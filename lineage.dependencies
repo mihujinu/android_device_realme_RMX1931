@@ -1,6 +1,15 @@
 [
   {
-    "repository": "android_kernel_realme_SM8150",
-    "target_path": "kernel/realme/sdm710"
+    "repository": "kernel_realme_sm8150",
+    "target_path": "kernel/realme/sm8150"
+  },
+  {
+    "repository": "vendor_realme_RMX1931",
+    "target_path": "vendor/realme/RMX1931"
+  },
+  {
+    "repository": "android_device_realme_RMX1931",
+    "target_path": "device/realme/RMX1931"
   }
+
 ]
