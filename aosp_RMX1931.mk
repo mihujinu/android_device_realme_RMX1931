@@ -14,6 +14,7 @@ $(call inherit-product, device/realme/RMX1931/device.mk)
 
 # Inherit some common lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+TARGET_FACE_UNLOCK_SUPPORTED := true
 
 # Device identifier. This must come after all inclusions.
 PRODUCT_NAME := lineage_RMX1931
