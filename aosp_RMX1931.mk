@@ -17,7 +17,7 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 TARGET_FACE_UNLOCK_SUPPORTED := true
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := lineage_RMX1931
+PRODUCT_NAME := aosp_RMX1931
 PRODUCT_DEVICE := RMX1931
 PRODUCT_BRAND := realme
 PRODUCT_MODEL := RMX1931
